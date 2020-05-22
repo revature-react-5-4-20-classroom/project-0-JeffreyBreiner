@@ -40,7 +40,7 @@ app.listen(6464, () => {
   connectionPool.connect().then(
     (client: PoolClient)=>{
       console.log('connected');
-      client.query('SELECT * FROM books;').then(
+      client.query('SELECT * FROM p0users;').then(
         (result : QueryResult) => {
           console.log(result.rows[0]);
         }
