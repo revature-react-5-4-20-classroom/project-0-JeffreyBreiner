@@ -5,8 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "nodemon --exec ts-node src/index.ts",
-    "test": "echo \"testing not configured\" && exit 1",
-    "deploy": "ts-node src/index.ts"
+    "test": "echo \"testing not configured\" && exit 1"
   },
   "author": "Dee Desilets",
   "license": "ISC",

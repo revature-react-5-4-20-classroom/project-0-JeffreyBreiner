@@ -79,7 +79,7 @@ export async function findUserByUsernamePassword(username: string, password: str
         let result: QueryResult = await client.query(
             'SELECT * FROM p0users WHERE p0users.username = $1 AND p0users.password = $2;', [username, password]);
         const usersMatchingUsernamePassword = result.rows.map((u) => {
-            return new User(u.user_id, u.username, u.password, u.firstName, u.lastName, u.email, u.role_name);
+            return new User(u.user_id, u.username, u.password, u.firstName, u.lastName, u.email, u.role);
         })
         if (usersMatchingUsernamePassword.length > 0) {
             return usersMatchingUsernamePassword[0];
@@ -118,7 +118,7 @@ export async function findUserByUsernamePassword(username: string, password: str
 //   }
   
 
-export async function updateUser(user_id?: number, username?: string, password?: string, firstName?: string, lastName?: string, email?: string, role?: number): Promise<User[]> {
+export async function updateUser(user_id: number, username?: string, password?: string, firstName?: string, lastName?: string, email?: string, role?: number): Promise<User[]> {
     let client: PoolClient = await connectionPool.connect();
     try {
         let query: string = ``;

@@ -4,14 +4,15 @@ import { Reimbursement } from "../models/reimbursements";
 
 
 
-export async function submitReimbursement(reimbursementId = 0, author: number, amount: number, dateSubmitted: number, 
+export async function submitReimbursement(author: number, amount: number, dateSubmitted: number, 
     description: string, type: number) {
     let client: PoolClient = await connectionPool.connect();
     try {
-        let resolver: QueryResult = await client.query('INSERT INTO p0reimbursement (reimbursement_id, author, amount, datesubmitted, dateresolved, description, resolver, status, "type") VALUES (DEFAULT, $1, $2, $3, -9999, $4, -999, 3, $5)', [author, amount, dateSubmitted, description, type]);
+    let resolver: QueryResult = await client.query('INSERT INTO p0reimbursement (reimbursement_id, author, amount, datesubmitted, dateresolved, description, resolver, status, "type") VALUES (DEFAULT, $1, $2, $3, -9999, $4, 4, 1, $5)', [author, amount, dateSubmitted, description, type]);
         let returnValue: QueryResult = await client.query('SELECT * FROM p0reimbursement WHERE author = $1 AND datesubmitted = $2;', [author, dateSubmitted]);
+        console.log(returnValue);
         let newArray: Reimbursement[] = returnValue.rows.map((u) => {
-            return new Reimbursement(u.reimbursement_Id, u.author, u.amount, u.dateSubmitted, u.dateResolved, u.description, u.resolver, u.status, u.type); //names directly from DB
+            return new Reimbursement(u.reimbursement_id, u.author, u.amount, u.datesubmitted, u.dateresolved, u.description, u.resolver, u.status, u.type); //names directly from DB
         });
         return newArray[0];
     } catch (e) {
@@ -28,7 +29,7 @@ export async function getReimbursementByStatus(id: number): Promise<Reimbursemen
         let result: QueryResult;
         result = await client.query(`SELECT * FROM p0reimbursement WHERE status = ${id} ORDER BY dateSubmitted DESC;`);
         let newArray: Reimbursement[] = result.rows.map((u) => {
-            return new Reimbursement(u.reimbursement_Id, u.author, u.amount, u.dateSubmitted, u.dateResolved, u.description, u.resolver, u.status, u.type);
+            return new Reimbursement(u.reimbursement_id, u.author, u.amount, u.datesubmitted, u.dateresolved, u.description, u.resolver, u.status, u.type);
         });
         return newArray;
     } catch (e) {
@@ -45,7 +46,7 @@ export async function getReimbursementByUser(id: number): Promise<Reimbursement[
         let result: QueryResult;
         result = await client.query(`SELECT * FROM p0reimbursement WHERE author = ${id} ORDER BY dateSubmitted DESC;`);
         let newArray: Reimbursement[] = result.rows.map((u) => {
-            return new Reimbursement(u.reimbursement_id, u.author, u.amount, u.dateSubmitted, u.dateResolved, u.description, u.resolver, u.status, u.type);
+            return new Reimbursement(u.reimbursement_id, u.author, u.amount, u.datesubmitted, u.dateresolved, u.description, u.resolver, u.status, u.type);
         });
         return newArray;
     } catch (e) {
@@ -55,7 +56,7 @@ export async function getReimbursementByUser(id: number): Promise<Reimbursement[
     }
 }
 
-export async function updateReimbursement(reimbursement_id?: number, author?: number, amount?: number, dateSubmitted?: number, dateResolved?: number, 
+export async function updateReimbursement(reimbursement_id: number, author?: number, amount?: number, dateSubmitted?: number, dateResolved?: number, 
     description?: string, resolver?: number, status?: number, type?: number): Promise<Reimbursement[]>{
     let client: PoolClient = await connectionPool.connect();
     try{
@@ -87,7 +88,7 @@ export async function updateReimbursement(reimbursement_id?: number, author?: nu
         
         let result:QueryResult = await client.query('SELECT * FROM p0reimbursement WHERE reimbursement_id = $1', [reimbursement_id]);
         let userArray:Reimbursement[] = result.rows.map((u) => {
-            return new Reimbursement(u.reimbursement_id, u.author, u.amount, u.dateSubmitted, u.dateResolved, u.description, u.resolver, u.status, u.type);
+            return new Reimbursement(u.reimbursement_id, u.author, u.amount, u.datesubmitted, u.dateresolved, u.description, u.resolver, u.status, u.type);
         });
         return userArray;
     } catch (e) {
@@ -110,7 +111,7 @@ export async function getAllReimbursements(): Promise<Reimbursement[]> {
             console.log(row.username);
         }
         return result.rows.map((u) => {
-            return new Reimbursement(u.reimbursement_id, u.author, u.amount, u.dateSubmitted, u.dateResolved, u.description, u.resolver, u.status, u.type);
+            return new Reimbursement(u.reimbursement_id, u.author, u.amount, u.datesubmitted, u.dateresolved, u.description, u.resolver, u.status, u.type);
         });
     } catch (e) {
         throw new Error(`Failed to query for all users: ${e.message}`);
