@@ -17,11 +17,11 @@ const app: Application = express();
 app.use(bodyParser.json());
 app.use(sessionMiddleware);
 app.use(loggingMiddleware);
-app.use(corsFilter);
 
 app.use('/login', loginRouter);
 app.use('/users', userRouter);
 app.use('/reimbursements', reimbursementRouter);
+app.use(corsFilter);
 
 app.get('/views', (req: Request, res: Response) => {
   console.log(req.session); // try to log it
